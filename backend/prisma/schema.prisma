@@ -1,0 +1,169 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  Int       @id @default(autoincrement())
+  email               String    @unique
+  role                UserRole  @default(PROJECT)
+  user                Agent?
+  project             Project?
+  password            String
+  hashedRefreshToken  String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @default(now())
+
+  @@map("users")
+}
+
+model Agent {
+  id         Int       @id @default(autoincrement())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int
+  avatar     String?   @default("https://cdn-icons-png.flaticon.com/512/236/236832.png")
+  name       String
+  chats      Chat[]
+  project    Project   @relation(fields: [projectId], references: [id])
+  isOnline   Boolean   @default(false)
+  projectId  String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+  feedback   Feedback[]
+  template   Template[]
+
+  @@map("agents")
+}
+
+model Chat {
+  id         String      @id @default(uuid())
+  agent      Agent?      @relation(fields: [agentId], references: [id])
+  agentId    Int?    
+  client     Client      @relation(fields: [clientId], references: [id])
+  clientId   String
+  status     ChatStatus  @default(OPEN)
+  messages   Message[]
+  feedback   Feedback?
+  
+  projectId  String
+  project    Project     @relation(fields: [projectId], references: [id])
+  
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @default(now())
+
+  @@map("chats")
+}
+
+model Message {
+  id         Int            @id @default(autoincrement())
+  text       String        
+  chat       Chat           @relation(fields: [chatId], references: [id])
+  chatId     String
+  status     MessageStatus  @default(SENT)
+  from       SentBy         @default(BOT)
+
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @default(now())
+
+  @@map("messages")
+}
+
+model Client {
+  id         String    @id @default(uuid())
+  name       String
+  chat       Chat?
+  avatar     String    @default("https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png")
+  email      String    
+  phone      String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+  feedback   Feedback[]
+  projectId  String
+  project    Project   @relation(fields: [projectId], references: [id])
+
+  @@map("clients")
+}
+
+model Project {
+  id         String    @id @default(uuid())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int
+  name       String
+  agent      Agent[]
+  website    String
+  handbook   Handbook[]
+  chat       Chat[]
+  client     Client[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+
+  @@map("projects")
+}
+
+model Feedback {
+  id         Int      @id @default(autoincrement())
+  rating     Int      @default(5)
+  agent      Agent    @relation(fields: [agentId], references: [id])
+  agentId    Int      
+  client     Client   @relation(fields: [clientId], references: [id])
+  clientId   String   
+  chat       Chat     @relation(fields: [chatId], references: [id])
+  chatId     String
+
+  @@map("feedbacks")
+}
+
+model Template {
+  id       Int     @id @default(autoincrement())
+  text     String
+  agentId  Int
+  agent    Agent   @relation(fields: [agentId], references: [id])
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+
+  @@map("templates")
+}
+
+model Handbook {
+  id         Int     @id @default(autoincrement())
+  question    String
+  answer     String
+  projectId  String
+  project    Project   @relation(fields: [projectId], references: [id])
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+
+  @@map("handbooks")
+}
+
+enum UserRole {
+  PROJECT
+  AGENT
+}
+
+enum SentBy {
+  AGENT
+  CLIENT
+  BOT
+}
+
+enum MessageStatus {
+  SENT
+  SEEN
+}
+
+enum ChatStatus {
+  OPEN
+  ACTIVE
+  CLOSED
+}

@@ -1,0 +1,26 @@
+$primary: #0e1621;
+$secondary: #768c9e;
+
+body {
+  background: $primary;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(#f1f1f1, 0.8);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #768c9e;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
