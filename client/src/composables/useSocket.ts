@@ -1,9 +1,6 @@
 import type { ChatEvents } from "@/types";
 import { io } from "socket.io-client";
 
-const PORT = 3333;
-const URL = `ws://localhost:${PORT}`;
-
 interface UseSocketParams {
   listeners: {
     [key in ChatEvents]?: (...args: any[]) => void;
@@ -23,7 +20,7 @@ const getUser = () => {
 };
 
 export const useSocket = ({ emitOnConnect, listeners }: UseSocketParams) => {
-  const socket = io(URL, {
+  const socket = io(import.meta.env.VITE_WS_URL, {
     auth: {
       clientToken: getUser()
     }

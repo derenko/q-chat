@@ -1,0 +1,75 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:12-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    logging:
+      driver: none
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    restart: unless-stopped
+
+  api:
+    stdin_open: true
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    env_file:
+      - ./backend/.env
+    links:
+      - postgres
+    depends_on:
+      - postgres
+
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    container_name: admin-ui
+    links:
+      - api
+    depends_on:
+      - api
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3001:80"
+    container_name: client-ui
+    links:
+      - api
+    depends_on:
+      - api
+
+volumes:
+  postgres-data:
+  pgadmin-data:
+
+networks:
+  traefik_default:
+    external: true

@@ -61,16 +61,25 @@ export const useProjectStore = defineStore({
       this.handbooks = this.handbooks.filter(handbook => handbook.id !== id);
     },
 
-    async updateHandbook(id: number, handbook: Handbook) {
-      const response = await API.project.updateHandbookForProject(id, handbook);
+    async updateHandbook(id: number, updatedHandbook: Handbook) {
+      const response = await API.project.updateHandbookForProject(
+        id,
+        updatedHandbook
+      );
       this.handbooks = this.handbooks.map(handbook =>
-        handbook.id === id ? response.data : handbook
+        handbook.id === id ? updatedHandbook : handbook
       );
     },
 
-    async updateProject(form: { name: string; website: string }) {
+    async createHandbook(form) {
+      const response = await API.project.createHandbookForProject(form);
+
+      this.handbooks.push(response.data);
+    },
+
+    async updateProject(id: string, form: { name: string; website: string }) {
       const userStore = useUserStore();
-      await API.project.updateProject(form);
+      await API.project.updateProject(id, form);
       await userStore.getUser();
     }
   }

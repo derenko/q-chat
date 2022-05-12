@@ -45,9 +45,8 @@
 
   type Values = typeof schema.__outputType;
 
-  async function onSubmit(values: Values) {
-    console.log("here", { values });
-    await projectStore.updateProject(values);
+  async function onSubmit({ name, website }: Values) {
+    await projectStore.updateProject(userStore.project?.id, { name, website });
     isEdit.value = false;
   }
 </script>

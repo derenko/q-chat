@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateAgentDto } from './dto';
+import {
+  CreateAgentDto,
+  CreateHandbookDto,
+  UpdateHandbookDto,
+  UpdateProjectDto,
+} from './dto';
 import * as bcrypt from 'bcryptjs';
 import * as moment from 'moment';
 
@@ -156,6 +161,21 @@ export class ProjectsService {
     };
   }
 
+  async createHandbookForProject(userId: number, dto: CreateHandbookDto) {
+    const project = await this.prisma.project.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    return this.prisma.handbook.create({
+      data: {
+        ...dto,
+        projectId: project.id,
+      },
+    });
+  }
+
   async getHandbooksForProject(userId: number) {
     const project = await this.prisma.project.findUnique({
       where: {
@@ -167,6 +187,48 @@ export class ProjectsService {
       where: {
         projectId: project.id,
       },
+    });
+  }
+
+  async updateHandbookForProject(
+    userId: number,
+    handbookId: number,
+    dto: UpdateHandbookDto,
+  ) {
+    const project = await this.prisma.project.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    return this.prisma.handbook.updateMany({
+      where: {
+        projectId: project.id,
+        id: handbookId,
+      },
+      data: dto,
+    });
+  }
+
+  async deleteHandbookForProject(userId: number, handbookId: number) {
+    const project = await this.prisma.project.findUnique({
+      where: { userId },
+    });
+
+    return this.prisma.handbook.deleteMany({
+      where: {
+        projectId: project.id,
+        id: handbookId,
+      },
+    });
+  }
+
+  updateProject(userId, dto: UpdateProjectDto) {
+    return this.prisma.project.update({
+      where: {
+        userId,
+      },
+      data: dto,
     });
   }
 }

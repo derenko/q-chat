@@ -26,7 +26,7 @@ const getHandbooksForProject = () => {
 };
 
 const deleteHandbookForProject = async (id: number) => {
-  return http.delete(`/agents/handooks/${id}`);
+  return http.delete(`/projects/handbooks/${id}`);
 };
 
 const createHandbookForProject = async (
@@ -36,11 +36,14 @@ const createHandbookForProject = async (
 };
 
 const updateHandbookForProject = async (id: number, handbook: any) => {
-  return http.put(`/projects/handbooks/${id}`, handbook);
+  return http.patch(`/projects/handbooks/${id}`, handbook);
 };
 
-const updateProject = async (form: { name: string; website: string }) => {
-  return http.put("/projects", form);
+const updateProject = async (
+  id: string,
+  form: { name: string; website: string }
+) => {
+  return http.patch(`/projects`, form);
 };
 
 export const project = {

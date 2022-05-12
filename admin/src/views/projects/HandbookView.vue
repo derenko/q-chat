@@ -56,8 +56,9 @@
     answer: yup.string().required("Це обов`язкове поле").label("Відповідь")
   });
 
-  function onSubmit(values: typeof schema.__outputType) {
-    console.log({ values });
+  async function onSubmit(values: typeof schema.__outputType) {
+    await projectStore.createHandbook(values);
+    isCreatingDialogVisible.value = false;
   }
 
   function onCreate() {
