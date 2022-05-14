@@ -9,10 +9,12 @@
     <AppLogo />
 
     <q-btn flat rounded color="primary">
-      <span class="text-white q-pl-md"
+      <span
+        class="text-white q-pl-md"
+        style="max-width: 190px; text-overflow: ellipsis"
         >Адміністратор {{ userStore.user?.project.name }}</span
       >
-      <q-menu>
+      <q-menu wi>
         <q-list style="width: 220px">
           <q-separator />
           <q-item>

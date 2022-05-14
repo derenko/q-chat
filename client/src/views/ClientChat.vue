@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import LoginForm from "@/components/LoginForm.vue";
   import { QScrollArea } from "quasar";
-  import { reactive, ref } from "vue";
+  import { ref } from "vue";
   import messageSound from "@/assets/sound/message.mp3";
   import moment from "moment";
   import FeedbackForm from "@/components/FeedbackForm.vue";
@@ -46,7 +46,7 @@
   const isAgentTyping = ref(false);
   const isChatClosed = ref(false);
 
-  const PROJECT_KEY = "3e99c370-2e08-4c9f-9580-d37d49f8244e";
+  const PROJECT_KEY = "5367ba10-9846-4de7-a5c3-31f21d6ea26f";
 
   function onSendMessage() {
     if (chat.value && client.value) {
@@ -68,9 +68,9 @@
     isSubmited.value = true;
   }
 
-  function onChatOpen(с: Chat) {
-    chat.value = с;
-    client.value = с.client;
+  function onChatOpen(c: Chat) {
+    chat.value = c;
+    client.value = c.client;
 
     localStorage.setItem("user", JSON.stringify(client.value));
   }

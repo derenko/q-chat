@@ -38,6 +38,12 @@ export const useProjectStore = defineStore({
       this.agents.push(response.data);
     },
 
+    async deleteAgent(agentId: number) {
+      const response = await API.project.deleteAgentForProject(agentId);
+
+      this.agents = this.agents.filter(agent => agent.id !== response.data.id);
+    },
+
     async getClients() {
       const response = await API.project.getClientsForProject();
 

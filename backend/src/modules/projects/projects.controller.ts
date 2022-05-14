@@ -9,7 +9,12 @@ import {
   Post,
 } from '@nestjs/common';
 import { GetCurrentUser } from 'src/common/decorators';
-import { CreateAgentDto, CreateHandbookDto, UpdateProjectDto } from './dto';
+import {
+  CreateAgentDto,
+  CreateHandbookDto,
+  DeleteAgentDto,
+  UpdateProjectDto,
+} from './dto';
 import { ProjectsService } from './projects.service';
 
 @Controller('projects')
@@ -27,6 +32,14 @@ export class ProjectsController {
     @Body() dto: CreateAgentDto,
   ) {
     return this.projectsService.createAgent(id, dto);
+  }
+
+  @Delete('/agents/:id')
+  deleteAgentForProject(
+    @GetCurrentUser('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) agentId: number,
+  ) {
+    return this.projectsService.deleteAgent(id, agentId);
   }
 
   @Get('/clients')

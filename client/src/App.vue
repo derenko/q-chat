@@ -5,5 +5,3 @@
 <template>
   <ClientChat />
 </template>
-
-<style></style>

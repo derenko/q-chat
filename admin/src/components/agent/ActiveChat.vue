@@ -169,18 +169,7 @@
                 </q-item-section>
                 <q-item-section>Інформація</q-item-section>
               </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section avatar>
-                  <q-icon name="email" />
-                </q-item-section>
-                <q-item-section>Надіслати E-мейл</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section avatar>
-                  <q-icon name="change_circle" />
-                </q-item-section>
-                <q-item-section>Змінити агента</q-item-section>
-              </q-item>
+
               <q-item clickable v-close-popup>
                 <q-item-section avatar>
                   <q-icon name="delete" color="red" />

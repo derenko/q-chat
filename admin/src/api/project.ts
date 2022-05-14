@@ -13,6 +13,10 @@ const createAgentForProject = (form: {
   return http.post("/projects/agents", form);
 };
 
+const deleteAgentForProject = (agentId: number) => {
+  return http.delete(`/projects/agents/${agentId}`);
+};
+
 const getClientsForProject = () => {
   return http.get("/projects/clients");
 };
@@ -55,5 +59,6 @@ export const project = {
   deleteHandbookForProject,
   createHandbookForProject,
   updateHandbookForProject,
-  updateProject
+  updateProject,
+  deleteAgentForProject
 };

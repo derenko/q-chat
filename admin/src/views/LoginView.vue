@@ -9,6 +9,7 @@
   const userStore = useUserStore();
   const isPasswordVisible = ref(false);
   const isLoading = ref(false);
+  const isError = ref(false);
 
   const initialValues = {
     email: "",
@@ -30,8 +31,15 @@
 
   const onSubmit = async (values: { email: string; password: string }) => {
     isLoading.value = true;
-    await userStore.signIn(values);
-    isLoading.value = false;
+    try {
+      await userStore.signIn(values);
+    } catch (e) {
+      if (e?.response.data.message === "invalid_credentials") {
+        isError.value = true;
+      }
+    } finally {
+      isLoading.value = false;
+    }
   };
 </script>
 <template>
@@ -81,6 +89,9 @@
           </template>
         </q-input-with-validation>
       </Field>
+      <h6 class="text-red text-center q-my-none text-body1" v-if="isError">
+        Неправильні дані входу
+      </h6>
       <q-btn
         color="primary"
         class="button--submit"
@@ -90,7 +101,7 @@
         >Увійти</q-btn
       >
 
-      <h6 class="text-center q-my-md text-grey">АБО</h6>
+      <h6 class="text-center q-my-md text-grey q-my-sm">АБО</h6>
 
       <q-btn color="grey" to="/registration" flat class="button--registration"
         >Зареєструватись</q-btn

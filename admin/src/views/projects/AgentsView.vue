@@ -65,9 +65,10 @@
 
   async function onSubmit(values: Values) {
     await projectStore.createAgent(values);
+    dialogs.create = false;
   }
 
-  async function onDelete() {
+  async function onDelete(id: number) {
     $q.dialog({
       title: "Видалити агента",
       message: "Ви спраді хочете видалити агента?",
@@ -79,8 +80,8 @@
         flat: true
       }
     })
-      .onOk(() => {
-        return;
+      .onOk(async () => {
+        await projectStore.deleteAgent(id);
       })
       .onDismiss(() => {
         return;
@@ -190,13 +191,18 @@
               readonly
               size="28px"
             />
-            ({{ props.row.rating.toFixed(1) }})
+            ({{ props.row.rating?.toFixed(1) ?? "0.0" }})
           </q-td>
           <q-td key="createdAt" :props="props">
             {{ moment(props.row.user.createdAt).format("DD.MM.YYYY") }}
           </q-td>
           <q-td key="actions" :props="props">
-            <q-btn color="red" icon="delete" @click="onDelete" flat></q-btn>
+            <q-btn
+              color="red"
+              icon="delete"
+              @click="onDelete(props.row.id)"
+              flat
+            ></q-btn>
           </q-td>
         </q-tr>
       </template>

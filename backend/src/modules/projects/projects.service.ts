@@ -3,11 +3,13 @@ import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateAgentDto,
   CreateHandbookDto,
+  DeleteAgentDto,
   UpdateHandbookDto,
   UpdateProjectDto,
 } from './dto';
 import * as bcrypt from 'bcryptjs';
 import * as moment from 'moment';
+import { throws } from 'assert';
 
 @Injectable()
 export class ProjectsService {
@@ -115,6 +117,17 @@ export class ProjectsService {
         projectId: project.id,
         userId: user.id,
         name: dto.name,
+      },
+      include: {
+        user: true,
+      },
+    });
+  }
+
+  async deleteAgent(userId: number, agentId: number) {
+    return this.prisma.agent.delete({
+      where: {
+        id: agentId,
       },
     });
   }

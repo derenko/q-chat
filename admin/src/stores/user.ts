@@ -45,7 +45,7 @@ export const useUserStore = defineStore({
           router.push("/agents");
         }
       } catch (e) {
-        console.error(e);
+        throw e;
       }
     },
 
