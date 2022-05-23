@@ -8,7 +8,7 @@ RUN yarn install
 COPY . .
 RUN yarn build
 
-# этап production (production-stage)
+
 FROM nginx:stable-alpine as production-stage
 COPY --from=build-stage /app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-stage /app/dist /usr/share/nginx/html

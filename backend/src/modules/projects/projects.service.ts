@@ -109,6 +109,7 @@ export class ProjectsService {
       data: {
         email: dto.email,
         password,
+        role: "AGENT"
       },
     });
 
