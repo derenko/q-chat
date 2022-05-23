@@ -117,7 +117,7 @@
           v-bind="field"
           placeholder="URL веб-сайту"
           autocomplete="off"
-          prefix="https://"
+          
         >
           <template v-slot:prepend>
             <q-icon name="link"></q-icon>

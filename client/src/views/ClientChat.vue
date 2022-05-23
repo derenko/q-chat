@@ -46,7 +46,7 @@
   const isAgentTyping = ref(false);
   const isChatClosed = ref(false);
 
-  const PROJECT_KEY = "5367ba10-9846-4de7-a5c3-31f21d6ea26f";
+  const PROJECT_KEY = "efdbafff-5685-4159-a590-eaf7d556c773";
 
   function onSendMessage() {
     if (chat.value && client.value) {

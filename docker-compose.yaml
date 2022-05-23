@@ -1,3 +1,5 @@
+# @format
+
 version: "3"
 services:
   postgres:
@@ -9,7 +11,6 @@ services:
       - ./backend/.env
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    restart: unless-stopped
 
   pgadmin:
     image: dpage/pgadmin4
